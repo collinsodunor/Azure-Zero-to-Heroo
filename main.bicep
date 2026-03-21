@@ -1,6 +1,8 @@
 param location string = 'eastus'
 param vmName string = 'myUbuntuSpotVM'
 param adminUsername string
+
+@secure()
 param adminPassword string // NEW: password for login
 
 // Virtual Network
