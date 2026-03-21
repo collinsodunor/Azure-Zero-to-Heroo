@@ -1,5 +1,15 @@
+## Deploy Bicep
 az group create --name learn-azure-cli --location eastus && \
 az deployment group create \
   --resource-group learn-azure-cli \
   --template-file main.bicep \
   --parameters adminUsername=azureuser adminPassword='StrongPassword123!'
+
+### Get Public IP
+  az vm list-ip-addresses \
+  --resource-group learn-azure-cli \
+  --name myUbuntuSpotVM \
+  --output table
+
+## Connect via SSH
+ssh azureuser@PUBLIC_IP
