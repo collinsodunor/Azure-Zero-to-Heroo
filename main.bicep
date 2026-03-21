@@ -1,22 +1,15 @@
 param location string = 'eastus'
 param vmName string = 'myUbuntuSpotVM'
 param adminUsername string
-param sshPublicKey string
+param adminPassword string // NEW: password for login
 
 // Virtual Network
 resource vnet 'Microsoft.Network/virtualNetworks@2023-02-01' = {
   name: 'myVnet'
   location: location
   properties: {
-    addressSpace: {
-      addressPrefixes: ['10.0.0.0/16']
-    }
-    subnets: [
-      {
-        name: 'default'
-        properties: { addressPrefix: '10.0.0.0/24' }
-      }
-    ]
+    addressSpace: { addressPrefixes: ['10.0.0.0/16'] }
+    subnets: [ { name: 'default', properties: { addressPrefix: '10.0.0.0/24' } } ]
   }
 }
 
@@ -83,28 +76,22 @@ resource nic 'Microsoft.Network/networkInterfaces@2023-02-01' = {
   }
 }
 
-// Spot Virtual Machine
+// Spot Virtual Machine with password login
 resource vm 'Microsoft.Compute/virtualMachines@2023-03-01' = {
   name: vmName
   location: location
   properties: {
     hardwareProfile: { vmSize: 'Standard_B1s' }
-    priority: 'Spot'                       // <--- Spot VM
-    evictionPolicy: 'Deallocate'          // Options: Deallocate or Delete
-    billingProfile: { maxPrice: -1 }      // -1 = pay up to standard price
+    priority: 'Spot'
+    evictionPolicy: 'Deallocate'
+    billingProfile: { maxPrice: -1 }
     osProfile: {
       computerName: vmName
       adminUsername: adminUsername
+      adminPassword: adminPassword // NEW: use password
       linuxConfiguration: {
-        disablePasswordAuthentication: true
-        ssh: {
-          publicKeys: [
-            {
-              path: '/home/${adminUsername}/.ssh/authorized_keys'
-              keyData: sshPublicKey
-            }
-          ]
-        }
+        disablePasswordAuthentication: false // MUST be false to allow password login
+        ssh: { publicKeys: [] } // optional, remove SSH keys
       }
     }
     storageProfile: {
