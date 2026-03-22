@@ -90,9 +90,9 @@ resource vm 'Microsoft.Compute/virtualMachines@2023-03-01' = {
     osProfile: {
       computerName: vmName
       adminUsername: adminUsername
-      adminPassword: adminPassword // NEW: use password
+      adminPassword: adminPassword 
       linuxConfiguration: {
-        disablePasswordAuthentication: false // MUST be false to allow password login
+        disablePasswordAuthentication: false 
       }
     }
     storageProfile: {
