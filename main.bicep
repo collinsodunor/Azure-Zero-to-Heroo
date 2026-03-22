@@ -83,7 +83,7 @@ resource vm 'Microsoft.Compute/virtualMachines@2023-03-01' = {
   name: vmName
   location: location
   properties: {
-    hardwareProfile: { vmSize: 'Standard_B1s' }
+    hardwareProfile: { vmSize: 'Standard_B2als_v2' }
     priority: 'Spot'
     evictionPolicy: 'Deallocate'
     billingProfile: { maxPrice: -1 }
